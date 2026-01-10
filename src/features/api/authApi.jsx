@@ -1,19 +1,20 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 
-const USER_API = "/api/v1/user/";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: USER_API,
+        baseUrl: BASE_URL,
         credentials: "include"
     }),
     endpoints: (builder) => ({
         
         registerUser: builder.mutation({
             query: (inputData) => ({
-                url: "register",
+                url: "/api/v1/user/register",
                 method: "POST",
                 body: inputData
             })
@@ -21,7 +22,7 @@ export const authApi = createApi({
 
         loginUser: builder.mutation({
             query: (inputData) => ({
-                url: "login",
+                url: "/api/v1/user/login",
                 method: "POST",
                 body: inputData
             }),
@@ -37,7 +38,7 @@ export const authApi = createApi({
         }),
         logoutUser: builder.mutation({
             query: () => ({
-                url: "logout",
+                url: "/api/v1/user/logout",
                 method: "GET"
             }),
             async onQueryStarted(_, { queryFulfilled, dispatch }) {
@@ -50,7 +51,7 @@ export const authApi = createApi({
         }),
         updateUser: builder.mutation({
             query: (formData) => ({
-                url: "profile/update",
+                url: "/api/v1/user/profile/update",
                 method: "PUT",
                 body: formData,
                 credentials: "include"
@@ -60,7 +61,7 @@ export const authApi = createApi({
         loadUser: builder.query({
             query: () => (
                 {
-                    url: "profile",
+                    url: "/api/v1/user/profile",
                     method: "GET"
                 }
             ),

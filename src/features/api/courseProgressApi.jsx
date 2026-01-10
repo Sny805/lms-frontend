@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_PROGRESS_API = "/api/v1/progress"
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const courseProgressApi = createApi({
     reducerPath: "courseProgressApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: COURSE_PROGRESS_API,
+        baseUrl: BASE_URL,
         credentials: "include"
     }),
 
@@ -13,7 +14,7 @@ export const courseProgressApi = createApi({
         // getCourseProgress
         getCourseProgress: builder.query({
             query: (courseId) => ({
-                url: `${courseId}`,
+                url: `/api/v1/progress/${courseId}`,
                 method: "GET"
             })
         }),
@@ -21,7 +22,7 @@ export const courseProgressApi = createApi({
         // updateLecture Update
         updateLectureProgres: builder.mutation({
             query: ({ courseId, lectureId }) => ({
-                url: `/${courseId}/lecture/${lectureId}/view`,
+                url: `/api/v1/progress/${courseId}/lecture/${lectureId}/view`,
                 method: "POST"
             })
         }),
@@ -29,14 +30,14 @@ export const courseProgressApi = createApi({
         //  courseCompleted 
         completeCourse: builder.mutation({
             query: (courseId) => ({
-                url: `/${courseId}/complete`,
+                url: `/api/v1/progress/${courseId}/complete`,
                 method: "POST"
             })
         }),
         // course Incomplete
         inCompleteCourse: builder.mutation({
             query: (courseId) => ({
-                url: `/${courseId}/incomplete`,
+                url: `/api/v1/progress/${courseId}/incomplete`,
                 method: "POST"
             })
         }),
