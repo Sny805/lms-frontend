@@ -11,11 +11,11 @@ const Progress = () => {
   const { courseId } = useParams()
 
   const { data, isError, isLoading, refetch } = useGetCourseProgressQuery(courseId);
-  const [updateLectureProgress,{}]=useUpdateLectureProgresMutation();
-   const[completeCourse, { data: markCompleteData, isSuccess: completedSuccess },] =useCompleteCourseMutation()
-   const [inCompleteCourse,{data: markInCompleteData, isSuccess: inCompletedSuccess },]=useInCompleteCourseMutation()
+  const [updateLectureProgress, { }] = useUpdateLectureProgresMutation();
+  const [completeCourse, { data: markCompleteData, isSuccess: completedSuccess },] = useCompleteCourseMutation()
+  const [inCompleteCourse, { data: markInCompleteData, isSuccess: inCompletedSuccess },] = useInCompleteCourseMutation()
 
-     useEffect(() => {
+  useEffect(() => {
     if (completedSuccess) {
       refetch();
       toast.success(markCompleteData.message);
@@ -27,7 +27,14 @@ const Progress = () => {
   }, [completedSuccess, inCompletedSuccess]);
 
   const [currentLecture, setCurrentLecture] = useState(null);
-  if (isLoading) return <p>Loading...</p>;
+  
+  if (isLoading) return (
+    <div className="py-32 text-center text-gray-500 dark:text-gray-400">
+      Loading Course Lectures.....
+    </div>
+  );
+
+
   if (isError) return <p>Failed to load course details</p>;
   const { courseDetails, progress, completed } = data.data;
   const { courseTitle, lectures } = courseDetails;
@@ -37,24 +44,24 @@ const Progress = () => {
     return progress.some((prog) => prog.lectureId === lectureId && prog.viewed);
   };
 
-   // Select Lecture Handler 
+  // Select Lecture Handler 
   const handleSelectLecture = (lecture) => {
     setCurrentLecture(lecture);
   }
-   // handle lecture progress
-  const handleLectureProgress= async(lectureId)=>{
-    await updateLectureProgress({courseId,lectureId})
+  // handle lecture progress
+  const handleLectureProgress = async (lectureId) => {
+    await updateLectureProgress({ courseId, lectureId })
     refetch();
   }
 
-   const handleCompleteCourse = async () => {
+  const handleCompleteCourse = async () => {
     await completeCourse(courseId);
   };
   const handleInCompleteCourse = async () => {
     await inCompleteCourse(courseId);
   };
 
-  
+
 
   return (
     <div className='max-w-7xl mx-auto p-4'>
@@ -82,8 +89,8 @@ const Progress = () => {
             <video
               src={currentLecture?.videoUrl || initialLecture?.videoUrl}
               controls
-               className="w-full h-80 md:rounded-lg"
-               onPlay={() =>
+              className="w-full h-80 md:rounded-lg"
+              onPlay={() =>
                 handleLectureProgress(currentLecture?._id || initialLecture._id)
               }
             >
@@ -104,8 +111,8 @@ const Progress = () => {
           <div className="flex-1 overflow-y-auto">
             {lectures.map((item, indx) => (
               <Card className={`mb-3 hover:cursor-pointer transition transform ${item._id === currentLecture?._id
-                  ? "bg-gray-200 dark:dark:bg-gray-800"
-                  : ""
+                ? "bg-gray-200 dark:dark:bg-gray-800"
+                : ""
                 } `} key={item._id} onClick={() => handleSelectLecture(item)}>
                 <CardContent className="flex items-center justify-between">
                   <div className="flex items-center">
