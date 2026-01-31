@@ -11,7 +11,6 @@ export const authApi = createApi({
         credentials: "include"
     }),
     endpoints: (builder) => ({
-        
         registerUser: builder.mutation({
             query: (inputData) => ({
                 url: "/api/v1/user/register",

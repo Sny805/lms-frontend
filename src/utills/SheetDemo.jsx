@@ -17,13 +17,13 @@ import { Link, useNavigate } from "react-router-dom"
 import { useLogoutUserMutation } from "@/features/api/authApi"
 
 export function SheetDemo({ user }) {
-    const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+    const [logoutUser] = useLogoutUserMutation();
 
     const handleLogout = () => {
         logoutUser();
     }
     const navigate = useNavigate();
-    const role = "instructor"
+    
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -35,30 +35,79 @@ export function SheetDemo({ user }) {
                     <Menu />
                 </Button>
             </SheetTrigger>
+               <SheetContent side="right" className="flex flex-col">
+  {user ? (
+    <>
+      {/* Header */}
+      <SheetHeader className="flex flex-row items-center justify-between mt-10">
+        <h1 className="text-lg font-semibold">
+          <Link to="/">My Account</Link>
+        </h1>
+        <DarkMode />
+      </SheetHeader>
 
-            <SheetContent side="right" className="flex flex-col">
-                {/* Header */}
-                <SheetHeader className="flex flex-row items-center justify-between mt-10">
-                    <h1 className="text-lg font-semibold"><Link to="/">My Learning</Link></h1>
-                    <DarkMode />
-                </SheetHeader>
+      {/* Navigation */}
+      <nav className="flex flex-col ml-4 mt-4 ">
+        <Link
+          to="/profile"
+          className="text-left text-gray-700 hover:text-black font-semibold mb-2 dark:text-white"
+        >
+          Edit Profile
+        </Link>
 
-                {/* Navigation */}
-                <nav className="flex flex-col ml-4">
-                    <button className="text-left text-gray-700 hover:text-black font-semibold mb-2"> <Link to="/profile">Edit Profile</Link></button>
-                    <button className="text-left text-gray-700 hover:text-black font-semibold mb-2"><Link to="/my-learning">My Learning</Link></button>
-                    <button className="text-left text-gray-700 hover:text-black font-semibold mb-2" onClick={handleLogout}>Logout</button>
-                </nav>
+        <Link
+          to="/my-learning"
+          className="text-left text-gray-700 hover:text-black font-semibold mb-2 dark:text-white"
+        >
+          My Learning
+        </Link>
 
-                {/* Dashboard button (moved right after nav) */}
+        <button
+          className="text-left text-gray-700 hover:text-black font-semibold mb-2 dark:text-white"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </nav>
 
-                {
-                    user?.role === "instructor" && (<SheetClose asChild>
-                        <Button className="mt-2 mx-4" onClick={() => navigate("/admin/dashboard")}>Dashboard</Button>
-                    </SheetClose>)
-                }
+      {/* Instructor Dashboard */}
+      {user?.role === "instructor" && (
+        <SheetClose asChild>
+          <Button
+            className="mt-2 mx-4"
+            onClick={() => navigate("/admin/dashboard")}
+          >
+            Dashboard
+          </Button>
+        </SheetClose>
+      )}
+    </>
+  ) : (
+    <>
+      {/* Guest / Not Logged In */}
+       
+      <nav className="flex flex-col ml-4 mt-10 ">
+        <Link
+          to="/signup"
+          className="text-left text-gray-700 hover:text-black font-semibold mb-2 dark:text-white"
+        >
+          Signup
+        </Link>
 
-            </SheetContent>
+        <Link
+          to="/login"
+          className="text-left text-gray-700 hover:text-black font-semibold  mb-4 dark:text-white"
+        >
+          Login
+        </Link>
+          <DarkMode />
+      </nav>
+    </>
+  )}
+</SheetContent>
+
+     
+           
 
         </Sheet>
     )

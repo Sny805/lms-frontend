@@ -107,7 +107,7 @@ const Navbar = () => {
             </div>
 
             <div className='flex justify-between items-center px-4 md:hidden h-full'>
-                <h1 className='text-2xl font-extrabold'>E-Learning</h1>
+                <Link to="/"><h1 className='text-2xl font-extrabold'>E-Learning</h1></Link>
                 <SheetDemo user={user}/>
             </div>
 
